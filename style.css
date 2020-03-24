@@ -6,9 +6,6 @@ body {
 }
 
 #canvas {
-    background-color: rgb(0, 0, 0);
-    width: 500px;
-    height: 700px;
     margin-top: 25px;
     z-index: 10;
 }
