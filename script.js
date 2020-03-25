@@ -21,8 +21,8 @@ let ball_Y = 350;
 let ballRadius = 5;
 
 // Speed
-let velocity_Y = -2;
-let velocity_X = velocity_Y;
+let speed_Y = -2;
+let speed_X = speed_Y;
 let computerSpeed = 4;
 
 // Score 
@@ -71,27 +71,27 @@ function renderCanvas() {
 function ballReset() {
     ball_X = width / 2;
     ball_Y = height / 2;
-    velocity_Y = -2;
+    speed_Y = -3;
     paddleContact = false;
 }
 
 function ballMove() {
     // Vertical Speed
-    ball_Y += -velocity_Y;
+    ball_Y += -speed_Y;
     // Horizontal Speed
     if (playerMoved && paddleContact) {
-        ball_X += velocity_X;
+        ball_X += speed_X;
     }
 }
 
 function ballBoundaries() {
     // Bounce off Left Wall
-    if (ball_X < 0 && velocity_X < 0) {
-        velocity_X =- velocity_X;
+    if (ball_X < 0 && speed_X < 0) {
+        speed_X =- speed_X;
     }
     // Bounce off Right Wall
-    if (ball_X > width && velocity_X > 0) {
-        velocity_X =- velocity_X;
+    if (ball_X > width && speed_X > 0) {
+        speed_X =- speed_X;
     }
     // Bounce off player paddle (bottom)
     if (ball_Y > height - paddleDiff) {
@@ -99,16 +99,17 @@ function ballBoundaries() {
             paddleContact = true;
             // Add Speed on Hit
             if (playerMoved) {
-                velocity_Y = velocity_Y - 1;
+                speed_Y = speed_Y - 1;
                 // Max Speed
-                if (velocity_Y < -5) {
-                    velocity_Y = -5;
+                if (speed_Y < -5) {
+                    speed_Y = -5;
+                    computerSpeed = 6;
                 }
             }
-            velocity_Y = -velocity_Y;
+            speed_Y = -speed_Y;
             trajectory_X = ball_X - (paddle1_X + paddleDiff);
-            velocity_X = trajectory_X * 0.3;
-            console.log('player Velocity',velocity_Y);
+            speed_X = trajectory_X * 0.3;
+            console.log('player speed',speed_Y);
         } else if (ball_Y > height) {
             // Reset Ball, add to Computer Score
             ballReset();            
@@ -120,14 +121,14 @@ function ballBoundaries() {
         if (ball_X > paddle2_X && ball_X < paddle2_X + paddleWidth) {
             // Add Speed on Hit
             if (playerMoved) {
-                velocity_Y = velocity_Y + 1;
+                speed_Y = speed_Y + 1;
                 // Max Speed
-                if (velocity_Y > 5) {
-                    velocity_Y = 5;
+                if (speed_Y > 5) {
+                    speed_Y = 5;
                 }
             }
-            velocity_Y = -velocity_Y;
-            console.log('computer Velocity',velocity_Y);
+            speed_Y = -speed_Y;
+            console.log('computer speed',speed_Y);
         } else if (ball_Y < 0) {
             // Reset Ball, add to Player Score
             ballReset();
