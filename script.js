@@ -120,7 +120,14 @@ window.onload = () => {
     window.requestAnimationFrame(animate);
     canvas.addEventListener('mousemove', (e) => {
         // console.log(e.clientX);
-        paddle1_X = (e.clientX - canvasPosition) - (paddleWidth / 2);
+        let halfWidth = paddleWidth / 2;
+        paddle1_X = (e.clientX - canvasPosition) - halfWidth;
+        if (paddle1_X < halfWidth) {
+            paddle1_X = 0;
+        } 
+        if (paddle1_X > (width - paddleWidth)) {
+            paddle1_X = width - paddleWidth;
+        }
         // canvas.style.cursor = 'none';
     });
 }
