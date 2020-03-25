@@ -26,8 +26,8 @@ let speed_X = speed_Y;
 let computerSpeed = 4;
 
 // Score 
-let playerScore = 1;
-let computerScore = 1;
+let playerScore = 0;
+let computerScore = 0;
 
 // Create Canvas Element
 function createCanvas() {
@@ -66,6 +66,11 @@ function renderCanvas() {
     context.arc(ball_X, ball_Y, ballRadius, 2 * Math.PI, false);
     context.fillStyle = 'white';
     context.fill();
+
+    // Score
+    context.font = "32px Lucida Console";
+    context.fillText(playerScore, 20, (canvas.height / 2) + 50);
+    context.fillText(computerScore, 20, (canvas.height / 2) - 30);
 }
 
 function ballReset() {
@@ -109,11 +114,11 @@ function ballBoundaries() {
             speed_Y = -speed_Y;
             trajectory_X = ball_X - (paddle1_X + paddleDiff);
             speed_X = trajectory_X * 0.3;
-            console.log('player speed',speed_Y);
+            // console.log('player speed',speed_Y);
         } else if (ball_Y > height) {
             // Reset Ball, add to Computer Score
             ballReset();            
-            console.log('Computer:', computerScore++);
+            // console.log('Computer:', computerScore++);
         }
     }
     // Bounce off computer paddle (top)
@@ -128,11 +133,11 @@ function ballBoundaries() {
                 }
             }
             speed_Y = -speed_Y;
-            console.log('computer speed',speed_Y);
+            // console.log('computer speed',speed_Y);
         } else if (ball_Y < 0) {
             // Reset Ball, add to Player Score
             ballReset();
-            console.log('Player:', playerScore++);
+            // console.log('Player:', playerScore++);
         }
     }
 }
@@ -168,7 +173,7 @@ window.onload = () => {
         if (paddle1_X > (width - paddleWidth)) {
             paddle1_X = width - paddleWidth;
         }
-        // canvas.style.cursor = 'none';
+        canvas.style.cursor = 'none';
     });
 }
 
