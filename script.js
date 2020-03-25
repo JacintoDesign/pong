@@ -12,6 +12,7 @@ let paddleWidth = 50;
 let paddleDiff = 25;
 let paddle1_X = 225;
 let paddle2_X = 225;
+let playerMoved = false;
 
 // Ball
 let ball_X = 250;
@@ -74,7 +75,7 @@ function ballReset() {
 
 function ballMove() {
     // Vertical Speed
-    ball_Y += velocity_Y;
+    ball_Y += -velocity_Y;
     // Horizontal Speed
     // ball_X += velocity_X;
 }
@@ -91,8 +92,13 @@ function ballBoundaries() {
     // Bounce off player paddle (bottom), or award point if missed
     if (ball_Y > height - paddleDiff) {
         if (ball_X > paddle1_X && ball_X < paddle1_X + paddleWidth) {
+            if (playerMoved) {
+                velocity_Y = velocity_Y - 1;
+            }
             velocity_Y = -velocity_Y;
-        } else {
+            trajectory_X = ball_X - (paddle1_X + paddleDiff);
+            velocity_X = trajectory_X * 0.3;
+        } else if (ball_Y > height) {
             ballReset();            
             console.log('Computer: ', computerScore++);
         }
@@ -101,7 +107,7 @@ function ballBoundaries() {
     if (ball_Y < paddleDiff) {
         if (ball_X > paddle2_X && ball_X < paddle2_X + paddleWidth) {
             velocity_Y = -velocity_Y;
-        } else {
+        } else if (ball_Y < 0){
             ballReset();
             console.log('Player: ', playerScore++);
         }
@@ -120,6 +126,7 @@ window.onload = () => {
     window.requestAnimationFrame(animate);
     canvas.addEventListener('mousemove', (e) => {
         // console.log(e.clientX);
+        playerMoved = true;
         let halfWidth = paddleWidth / 2;
         paddle1_X = (e.clientX - canvasPosition) - halfWidth;
         if (paddle1_X < halfWidth) {
