@@ -13,6 +13,7 @@ let paddleDiff = 25;
 let paddle1_X = 225;
 let paddle2_X = 225;
 let playerMoved = false;
+let paddleContact = false;
 
 // Ball
 let ball_X = 250;
@@ -71,14 +72,14 @@ function ballReset() {
     ball_X = width / 2;
     ball_Y = height / 2;
     velocity_Y = -2;
-    ball_X = velocity_X;
+    paddleContact = false;
 }
 
 function ballMove() {
     // Vertical Speed
     ball_Y += -velocity_Y;
     // Horizontal Speed
-    if (playerMoved) {
+    if (playerMoved && paddleContact) {
         ball_X += velocity_X;
     }
 }
@@ -92,32 +93,45 @@ function ballBoundaries() {
     if (ball_X > width && velocity_X > 0) {
         velocity_X =- velocity_X;
     }
-    // Bounce off player paddle (bottom), or award point if missed
+    // Bounce off player paddle (bottom)
     if (ball_Y > height - paddleDiff) {
         if (ball_X > paddle1_X && ball_X < paddle1_X + paddleWidth) {
+            paddleContact = true;
+            // Add Speed on Hit
             if (playerMoved) {
                 velocity_Y = velocity_Y - 1;
+                // Max Speed
+                if (velocity_Y < -5) {
+                    velocity_Y = -5;
+                }
             }
             velocity_Y = -velocity_Y;
             trajectory_X = ball_X - (paddle1_X + paddleDiff);
             velocity_X = trajectory_X * 0.3;
             console.log('player Velocity',velocity_Y);
         } else if (ball_Y > height) {
+            // Reset Ball, add to Computer Score
             ballReset();            
-            console.log('Computer: ', computerScore++);
+            console.log('Computer:', computerScore++);
         }
     }
-    // Bounce off computer paddle (top), or award point if missed
+    // Bounce off computer paddle (top)
     if (ball_Y < paddleDiff) {
         if (ball_X > paddle2_X && ball_X < paddle2_X + paddleWidth) {
+            // Add Speed on Hit
             if (playerMoved) {
                 velocity_Y = velocity_Y + 1;
+                // Max Speed
+                if (velocity_Y > 5) {
+                    velocity_Y = 5;
+                }
             }
             velocity_Y = -velocity_Y;
             console.log('computer Velocity',velocity_Y);
         } else if (ball_Y < 0) {
+            // Reset Ball, add to Player Score
             ballReset();
-            console.log('Player: ', playerScore++);
+            console.log('Player:', playerScore++);
         }
     }
 }
