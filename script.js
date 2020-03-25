@@ -16,8 +16,8 @@ let ball_Y = 350;
 let ballRadius = 5;
 
 // Speed
-let velocity_Y = 2;
-// let velocity_X = velocity_Y;
+let velocity_Y = -2;
+let velocity_X = velocity_Y;
 // let computerSpeed = 4;
 
 // Create Canvas Element
@@ -59,13 +59,28 @@ function renderCanvas() {
     context.fill();
 }
 
-function update() {
+function ballUpdate() {
+    // Vertical Speed
     ball_Y += velocity_Y;
+    // Horizontal Speed
+    ball_X += velocity_X;
+}
+
+function ballBoundaries() {
+    // Bounce off Left Wall
+    if (ball_X < 0 && velocity_X < 0) {
+        velocity_X = -velocity_X;
+    }
+    // Bounce off Right Wall
+    if (ball_X > width && velocity_X > 0) {
+        velocity_X = -velocity_X;
+    }
 }
 
 function animate() {
     renderCanvas();
-    update();
+    ballUpdate();
+    ballBoundaries();
     window.requestAnimationFrame(animate);
 }
 
