@@ -21,6 +21,10 @@ let velocity_Y = -2;
 let velocity_X = velocity_Y;
 // let computerSpeed = 4;
 
+// Score 
+let playerScore = 1;
+let computerScore = 1;
+
 // Create Canvas Element
 function createCanvas() {
     canvas.id = 'canvas';
@@ -60,11 +64,17 @@ function renderCanvas() {
     context.fill();
 }
 
-function ballUpdate() {
-    // Vertical Speed
+function ballReset() {
+    ball_X = width / 2;
+    ball_Y = height / 2;
     ball_Y += -velocity_Y;
+}
+
+function ballMove() {
+    // Vertical Speed
+    ball_Y += velocity_Y;
     // Horizontal Speed
-    // ball_X += velocity_X;
+    ball_X += velocity_X;
 }
 
 function ballBoundaries() {
@@ -81,7 +91,8 @@ function ballBoundaries() {
         if (ball_X > paddle1_X && ball_X < paddle1_X + paddleWidth) {
             velocity_Y = -velocity_Y;
         } else {
-            console.log('computer Point');
+            ballReset();            
+            console.log('Computer: ', computerScore++);
         }
     }
     // Bounce off computer paddle (top), or award point if missed
@@ -89,14 +100,15 @@ function ballBoundaries() {
         if (ball_X > paddle1_X && ball_X < paddle1_X + paddleWidth) {
             velocity_Y = -velocity_Y;
         } else {
-            console.log('player Point');
+            ballReset();
+            console.log('Player: ', playerScore++);
         }
     }
 }
 
 function animate() {
     renderCanvas();
-    ballUpdate();
+    ballMove();
     ballBoundaries();
     window.requestAnimationFrame(animate);
 }
