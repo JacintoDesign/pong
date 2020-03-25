@@ -11,12 +11,12 @@ let paddle1_X = 225;
 let paddle2_X = 225;
 
 // Ball
-// let ball_X = 250;
-// let ball_Y = 350;
-// let ballRadius = 5;
+let ball_X = 250;
+let ball_Y = 350;
+let ballRadius = 5;
 
 // Speed
-// let velocity_Y = 4;
+let velocity_Y = 2;
 // let velocity_X = velocity_Y;
 // let computerSpeed = 4;
 
@@ -44,19 +44,33 @@ function renderCanvas() {
     // Paddle 2
     context.fillRect(paddle2_X, 10, paddleWidth, paddleHeight);
 
+    // Dashed Center Line
+    context.beginPath();
+    context.setLineDash([4]);
+    context.moveTo(0, 350);
+    context.lineTo(500, 350);
+    context.strokeStyle = 'grey';
+    context.stroke();
 
-    // window.requestAnimationFrame(animate);
+    // Ball
+    context.beginPath();
+    context.arc(ball_X, ball_Y, ballRadius, 2 * Math.PI, false);
+    context.fillStyle = 'white';
+    context.fill();
 }
 
-// function update() {
-    
-// }
+function update() {
+    ball_Y += velocity_Y;
+}
 
-// function animate() {
-//     update();
-//     render();
-//     window.requestAnimationFrame(animate);
-// }
+function animate() {
+    renderCanvas();
+    update();
+    window.requestAnimationFrame(animate);
+}
 
-createCanvas();
+window.onload = () => {
+    createCanvas();
+    window.requestAnimationFrame(animate);
+}
 
