@@ -3,6 +3,8 @@ const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 let width = 500;
 let height = 700;
+let screenWidth = window.screen.width;
+let canvasPosition = (screenWidth / 2) - (width / 2);
 
 // Paddle
 let paddleHeight = 10;
@@ -74,7 +76,7 @@ function ballMove() {
     // Vertical Speed
     ball_Y += velocity_Y;
     // Horizontal Speed
-    ball_X += velocity_X;
+    // ball_X += velocity_X;
 }
 
 function ballBoundaries() {
@@ -97,7 +99,7 @@ function ballBoundaries() {
     }
     // Bounce off computer paddle (top), or award point if missed
     if (ball_Y < paddleDiff) {
-        if (ball_X > paddle1_X && ball_X < paddle1_X + paddleWidth) {
+        if (ball_X > paddle2_X && ball_X < paddle2_X + paddleWidth) {
             velocity_Y = -velocity_Y;
         } else {
             ballReset();
@@ -116,5 +118,10 @@ function animate() {
 window.onload = () => {
     createCanvas();
     window.requestAnimationFrame(animate);
+    canvas.addEventListener('mousemove', (e) => {
+        // console.log(e.clientX);
+        paddle1_X = (e.clientX - canvasPosition) - (paddleWidth / 2);
+        // canvas.style.cursor = 'none';
+    });
 }
 
