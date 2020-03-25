@@ -22,7 +22,7 @@ let ballRadius = 5;
 // Speed
 let velocity_Y = -2;
 let velocity_X = velocity_Y;
-// let computerSpeed = 4;
+let computerSpeed = 4;
 
 // Score 
 let playerScore = 1;
@@ -70,14 +70,17 @@ function renderCanvas() {
 function ballReset() {
     ball_X = width / 2;
     ball_Y = height / 2;
-    ball_Y += -velocity_Y;
+    velocity_Y = -2;
+    ball_X = velocity_X;
 }
 
 function ballMove() {
     // Vertical Speed
     ball_Y += -velocity_Y;
     // Horizontal Speed
-    // ball_X += velocity_X;
+    if (playerMoved) {
+        ball_X += velocity_X;
+    }
 }
 
 function ballBoundaries() {
@@ -98,6 +101,7 @@ function ballBoundaries() {
             velocity_Y = -velocity_Y;
             trajectory_X = ball_X - (paddle1_X + paddleDiff);
             velocity_X = trajectory_X * 0.3;
+            console.log('player Velocity',velocity_Y);
         } else if (ball_Y > height) {
             ballReset();            
             console.log('Computer: ', computerScore++);
@@ -106,10 +110,24 @@ function ballBoundaries() {
     // Bounce off computer paddle (top), or award point if missed
     if (ball_Y < paddleDiff) {
         if (ball_X > paddle2_X && ball_X < paddle2_X + paddleWidth) {
+            if (playerMoved) {
+                velocity_Y = velocity_Y + 1;
+            }
             velocity_Y = -velocity_Y;
-        } else if (ball_Y < 0){
+            console.log('computer Velocity',velocity_Y);
+        } else if (ball_Y < 0) {
             ballReset();
             console.log('Player: ', playerScore++);
+        }
+    }
+}
+
+function computerAI() {
+    if (playerMoved) {
+        if (paddle2_X + paddleDiff < ball_X) {
+            paddle2_X += computerSpeed;
+        } else {
+            paddle2_X -= computerSpeed;
         }
     }
 }
@@ -118,6 +136,7 @@ function animate() {
     renderCanvas();
     ballMove();
     ballBoundaries();
+    computerAI();
     window.requestAnimationFrame(animate);
 }
 
@@ -127,9 +146,8 @@ window.onload = () => {
     canvas.addEventListener('mousemove', (e) => {
         // console.log(e.clientX);
         playerMoved = true;
-        let halfWidth = paddleWidth / 2;
-        paddle1_X = (e.clientX - canvasPosition) - halfWidth;
-        if (paddle1_X < halfWidth) {
+        paddle1_X = (e.clientX - canvasPosition) - paddleDiff;
+        if (paddle1_X < paddleDiff) {
             paddle1_X = 0;
         } 
         if (paddle1_X > (width - paddleWidth)) {
