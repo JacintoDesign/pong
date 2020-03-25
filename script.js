@@ -117,8 +117,9 @@ function ballBoundaries() {
             // console.log('player speed',speed_Y);
         } else if (ball_Y > height) {
             // Reset Ball, add to Computer Score
-            ballReset();            
-            // console.log('Computer:', computerScore++);
+            ballReset();      
+            computerScore++;      
+            // console.log('Computer:', computerScore);
         }
     }
     // Bounce off computer paddle (top)
@@ -137,7 +138,8 @@ function ballBoundaries() {
         } else if (ball_Y < 0) {
             // Reset Ball, add to Player Score
             ballReset();
-            // console.log('Player:', playerScore++);
+            playerScore++;
+            // console.log('Player:', playerScore);
         }
     }
 }
