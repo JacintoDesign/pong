@@ -1,4 +1,6 @@
 // Canvas Related 
+const container = document.getElementById('container');
+const gameOverEl = document.createElement('div');
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 let width = 500;
@@ -28,13 +30,15 @@ let computerSpeed = 4;
 // Score 
 let playerScore = 0;
 let computerScore = 0;
+let winningScore = 7;
+let isGameOver = false;
 
 // Create Canvas Element
 function createCanvas() {
     canvas.id = 'canvas';
     canvas.width = width;
     canvas.height = height;
-    document.body.appendChild(canvas);
+    container.appendChild(canvas);
     renderCanvas();
 }
 
@@ -154,20 +158,49 @@ function computerAI() {
     }
 }
 
+function gameOver() {
+    if (playerScore == winningScore || computerScore == winningScore) {
+        isGameOver = true;
+        let winner;
+        container.removeChild(canvas);
+        gameOverEl.classList.add('game-over-container');
+        if (playerScore == winningScore) {
+            winner = 'Player 1';
+        }
+        if (computerScore == winningScore) {
+            winner = 'Computer';
+        }
+        gameOverEl.innerHTML = `
+            <h1>${winner} Wins!</h1>
+            <button onclick="startGame()">Play Again</button>
+        `;
+        container.appendChild(gameOverEl);
+    }
+}
+
 function animate() {
     renderCanvas();
     ballMove();
     ballBoundaries();
     computerAI();
+    gameOver();
     window.requestAnimationFrame(animate);
 }
 
-window.onload = () => {
+function startGame() {
+    if (isGameOver == true) {
+        container.removeChild(gameOverEl);
+    }
+    isGameOver = false;
+    playerScore = 0;
+    computerScore = 0;
+    ballReset();
     createCanvas();
     window.requestAnimationFrame(animate);
     canvas.addEventListener('mousemove', (e) => {
         // console.log(e.clientX);
         playerMoved = true;
+        // Compensate for canvas being centered
         paddle1_X = (e.clientX - canvasPosition) - paddleDiff;
         if (paddle1_X < paddleDiff) {
             paddle1_X = 0;
@@ -178,4 +211,6 @@ window.onload = () => {
         canvas.style.cursor = 'none';
     });
 }
+
+startGame();
 
