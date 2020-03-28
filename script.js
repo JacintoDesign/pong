@@ -7,6 +7,7 @@ let width = 500;
 let height = 700;
 let screenWidth = window.screen.width;
 let canvasPosition = (screenWidth / 2) - (width / 2);
+let isMobile = window.matchMedia('(max-width: 600px)');
 
 // Paddle
 let paddleHeight = 10;
@@ -23,9 +24,20 @@ let ball_Y = 350;
 let ballRadius = 5;
 
 // Speed
-let speed_Y = -2;
-let speed_X = speed_Y;
-let computerSpeed = 4;
+let speed_Y;
+let speed_X;
+let computerSpeed;
+
+// Change Mobile Settings
+if (isMobile.matches) {
+    speed_Y = -2;
+    speed_X = speed_Y
+    computerSpeed = 4;
+} else {
+    speed_Y = -1;
+    speed_X = speed_Y
+    computerSpeed = 3;
+}
 
 // Score 
 let playerScore = 0;
