@@ -6,11 +6,6 @@ body {
   font-family: "Courier New", Courier, monospace;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-}
-
 canvas {
   margin-top: 25px;
   z-index: 10;

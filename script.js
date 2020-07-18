@@ -1,13 +1,13 @@
-// Canvas Related
-const container = document.getElementById('container');
-const gameOverEl = document.createElement('div');
+// Canvas
+const { body } = document;
 const canvas = document.createElement('canvas');
-const context = canvas.getContext('2d');
 const width = 500;
 const height = 700;
+const context = canvas.getContext('2d');
 const screenWidth = window.screen.width;
 const canvasPosition = screenWidth / 2 - width / 2;
 const isMobile = window.matchMedia('(max-width: 600px)');
+const gameOverEl = document.createElement('div');
 
 // Paddle
 const paddleHeight = 10;
@@ -43,8 +43,9 @@ if (isMobile.matches) {
 // Score
 let playerScore = 0;
 let computerScore = 0;
-const winningScore = 7;
-let isGameOver = false;
+const winningScore = 1;
+let isGameOver = true;
+let newGame = true;
 
 // Render Everything on Canvas
 function renderCanvas() {
@@ -85,7 +86,7 @@ function renderCanvas() {
 function createCanvas() {
   canvas.width = width;
   canvas.height = height;
-  container.appendChild(canvas);
+  body.appendChild(canvas);
   renderCanvas();
 }
 
@@ -175,8 +176,8 @@ function computerAI() {
 }
 
 function showGameOverEl(winner) {
-  // Hide Canvas, Show Game Over Container
-  container.removeChild(canvas);
+  // Hide Canvas
+  canvas.hidden = true;
   // Container
   gameOverEl.textContent = '';
   gameOverEl.classList.add('game-over-container');
@@ -189,7 +190,7 @@ function showGameOverEl(winner) {
   playAgainBtn.textContent = 'Play Again';
   // Append
   gameOverEl.append(title, playAgainBtn);
-  container.appendChild(gameOverEl);
+  body.appendChild(gameOverEl);
 }
 
 // Check If One Player Has Winning Score, If They Do, End Game
@@ -215,20 +216,24 @@ function animate() {
   ballBoundaries();
   computerAI();
   gameOver();
-  window.requestAnimationFrame(animate);
+  if (!isGameOver) {
+    window.requestAnimationFrame(animate);
+  }
 }
 
 // Start Game, Reset Everything
 function startGame() {
-  if (isGameOver === true) {
-    container.removeChild(gameOverEl);
+  if (isGameOver && !newGame) {
+    body.removeChild(gameOverEl);
+    canvas.hidden = false;
   }
   isGameOver = false;
+  newGame = false;
   playerScore = 0;
   computerScore = 0;
   ballReset();
   createCanvas();
-  window.requestAnimationFrame(animate);
+  animate();
   canvas.addEventListener('mousemove', (e) => {
     // console.log(e.clientX);
     playerMoved = true;
